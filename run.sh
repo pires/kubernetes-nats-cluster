@@ -15,5 +15,5 @@ export NATS_TLS=${NATS_TLS:-false}
 
 # run
 sudo -E -u nats /gnatsd -m 8222 $NATS_EXTRA --user $NATS_USER --pass $NATS_PASS \
-    --cluster=nats://0.0.0.0:6222 \
-    --routes=nats-route://$NATS_USER:$NATS_PASS@$NATS_K8S_SVC:6222
+    -cluster nats://0.0.0.0:6222 \
+    -routes nats://$NATS_USER:$NATS_PASS@$NATS_K8S_SVC:6222
