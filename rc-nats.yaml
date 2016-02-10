@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nats
+  labels:
+    component: nats
+spec:
+  replicas: 1
+  selector:
+    component: nats
+  template:
+    metadata:
+      labels:
+        component: nats
+    spec:
+      serviceAccount: nats
+      containers:
+      - name: nats
+        image: quay.io/pires/docker-nats:d77f416
+        imagePullPolicy: Always
+        env:
+        - name: KUBERNETES_CA_CERTIFICATE_FILE
+          value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: "NATS_EXTRA"
+          value: "-DV"
+        ports:
+        - containerPort: 4222
+          name: client
+          protocol: TCP
+        - containerPort: 6222
+          name: cluster
+          protocol: TCP
+        - containerPort: 8222
+          name: monitor
+          protocol: TCP
