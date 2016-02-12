@@ -9,18 +9,18 @@ NATS cluster on top of Kubernetes made easy.
 
 ## How I build the image
 
-First, one needs to build `gnatsd` that supports the topology gossiping to be released after `v0.7.2`, the latest release available. I chose the last commit in the current `master` branch, `d77f416`.
+First, one needs to build `gnatsd` that supports the topology gossiping to be released after `v0.7.2`, the latest release available. I chose the last commit in the current `master` branch, `1f143a7`.
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
-git co d77f416
+git co 1f143a7
 GOARCH=amd64 GOOS=linux go build
 ```
 
 Then, I copied the resulting binary to this repository `artifacts` folder and proceed to build and publish the container image:
 ```
-docker build -t quay.io/pires/docker-nats:d77f416 .
-docker push quay.io/pires/docker-nats:d77f416
+docker build -t quay.io/pires/docker-nats:1f143a7 .
+docker push quay.io/pires/docker-nats:1f143a7
 ```
 
 ## Deploy
@@ -45,7 +45,7 @@ NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)                      SELECTOR   
 kubernetes   10.100.0.1   <none>        443/TCP                      <none>           58m
 nats         None         <none>        4222/TCP,6222/TCP,8222/TCP   component=nats   23m
 CONTROLLER   CONTAINER(S)   IMAGE(S)                            SELECTOR         REPLICAS   AGE
-nats         nats           quay.io/pires/docker-nats:d77f416   component=nats   3          23m
+nats         nats           quay.io/pires/docker-nats:1f143a7   component=nats   3          23m
 NAME         READY     STATUS    RESTARTS   AGE
 nats-c3eu2   1/1       Running   0          23m
 nats-ruu5q   1/1       Running   0          21m

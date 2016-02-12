@@ -16,7 +16,7 @@ spec:
       serviceAccount: nats
       containers:
       - name: nats
-        image: quay.io/pires/docker-nats:d77f416
+        image: quay.io/pires/docker-nats:1f143a7
         imagePullPolicy: Always
         env:
         - name: "NATS_EXTRA"
