@@ -5,7 +5,7 @@ metadata:
   labels:
     component: nats
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     component: nats
   template:
@@ -16,7 +16,7 @@ spec:
       serviceAccount: nats
       containers:
       - name: nats
-        image: quay.io/pires/docker-nats:1f143a7
+        image: quay.io/pires/docker-nats:49a7f22
         imagePullPolicy: Always
         env:
         - name: "NATS_EXTRA"

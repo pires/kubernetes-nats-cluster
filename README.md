@@ -3,8 +3,8 @@ NATS cluster on top of Kubernetes made easy.
 
 ## Pre-requisites
 
-* Kubernetes cluster (tested with v1.1.7 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
-* GKE 1.1.7
+* Kubernetes cluster (tested with v1.1.8 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
+* GKE 1.1.8
 * `kubectl` configured to access your cluster master API Server
 
 ## How I build the image
@@ -13,14 +13,14 @@ First, one needs to build `gnatsd` that supports the topology gossiping to be re
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
-git co 1f143a7
+git co 49a7f22
 GOARCH=amd64 GOOS=linux go build
 ```
 
 Then, I copied the resulting binary to this repository `artifacts` folder and proceed to build and publish the container image:
 ```
-docker build -t quay.io/pires/docker-nats:1f143a7 .
-docker push quay.io/pires/docker-nats:1f143a7
+docker build -t quay.io/pires/docker-nats:49a7f22 .
+docker push quay.io/pires/docker-nats:49a7f22
 ```
 
 ## Deploy
