@@ -24,7 +24,7 @@ if [ "$TLS" = false ] ; then
 else
     sudo -E -u nats /gnatsd -m 8222 $EXTRA \
         --user $USER --pass $PASS \
-	--tls --tlscert $TLSCERT --tlskey $TLSKEY
+	--tls --tlscert $TLSCERT --tlskey $TLSKEY \
         --cluster nats://0.0.0.0:6222 \
         --routes nats://$USER:$PASS@$SVC:6222
 fi
