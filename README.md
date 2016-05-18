@@ -8,6 +8,7 @@ NATS cluster on top of Kubernetes made easy.
 * Kubernetes cluster (tested with v1.2.4 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
 * GKE 1.1.x and 1.2.x
 * `kubectl` configured to access your cluster master API Server
+* OpenSSL for TLS certificate generation.
 
 ## How I built the image
 
@@ -29,7 +30,6 @@ git push
 ## Deploy
 
 ```
-kubectl create -f service-account.yaml
 kubectl create -f svc-nats.yaml
 kubectl create -f rc-nats.yaml
 ```
@@ -64,4 +64,27 @@ In this case, we're using a [`headless service`](http://kubernetes.io/v1.1/docs/
 Just point your client apps to:
 ```
 nats:4222
+```
+
+## TLS
+
+First, we need to generate a valid TLS certificate:
+```
+openssl genrsa -out ca-key.pem 2048
+openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=littlebits-kube-ca"
+openssl genrsa -out nats-key.pem 2048
+openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=littlebits-kube-nats" -config ssl.cnf
+openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=littlebits-kube-nats" -config ssl.cnf
+openssl x509 -req -in nats.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out nats.pem -days 3650 -extensions v3_req -extfile ssl.cnf
+```
+
+Now, it's time to create a Kubernetes secret to store the certificate files:
+```
+kubectl create secret generic tls-nats --from-file nats.pem --from-file nats-key.pem
+```
+
+Finally, deploy a secured NATS cluster:
+```
+kubectl create -f rc-nats-tls.yaml
+kubectl scale rc/nats --replicas=3
 ```

@@ -1,12 +1,10 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   name: nats
   labels:
     component: nats
 spec:
-  selector:
-    component: nats
   template:
     metadata:
       labels:
@@ -16,9 +14,18 @@ spec:
       - name: nats
         image: quay.io/pires/docker-nats:0.8.0
         imagePullPolicy: Always
+        volumeMounts:
+          - name: tls-volume
+            mountPath: /etc/nats/tls
         env:
         - name: EXTRA
           value: -DV
+        - name: TLS
+          value: "true"
+        - name: TLSCERT
+          value: /etc/nats/tls/nats.pem
+        - name: TLSKEY
+          value: /etc/nats/tls/nats-key.pem
         ports:
         - containerPort: 4222
           name: client
@@ -36,3 +43,7 @@ spec:
               port: 8222
             initialDelaySeconds: 15
             timeoutSeconds: 5
+      volumes:
+      - name: tls-volume
+        secret:
+          secretName: tls-nats

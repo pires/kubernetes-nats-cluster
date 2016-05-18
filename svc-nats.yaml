@@ -11,10 +11,7 @@ spec:
   ports:
   - name: client
     port: 4222
-    protocol: TCP
   - name: cluster
     port: 6222
-    protocol: TCP
   - name: monitor
     port: 8222
-    protocol: TCP
