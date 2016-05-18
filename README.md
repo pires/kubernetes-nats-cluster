@@ -20,11 +20,11 @@ git co tags/v0.8.0
 GOARCH=amd64 GOOS=linux go build
 ```
 
-Then, I copied the resulting binary to this repository `artifacts` folder and proceed to push a new tag that will trigger an automatic build:
+Then, I copied the resulting binary to this repository `artifacts` folder, committed and proceeded to push a new tag that will trigger an automatic build:
 ```
-docker build -t quay.io/pires/docker-nats:0.8.0 .
 git tag 0.8.0
 git push
+git push --tags
 ```
 
 ## Deploy
@@ -71,10 +71,10 @@ nats:4222
 First, we need to generate a valid TLS certificate:
 ```
 openssl genrsa -out ca-key.pem 2048
-openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=littlebits-kube-ca"
+openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=kube-ca"
 openssl genrsa -out nats-key.pem 2048
-openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=littlebits-kube-nats" -config ssl.cnf
-openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=littlebits-kube-nats" -config ssl.cnf
+openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=kube-nats" -config ssl.cnf
+openssl req -new -key nats-key.pem -out nats.csr -subj "/CN=kube-nats" -config ssl.cnf
 openssl x509 -req -in nats.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out nats.pem -days 3650 -extensions v3_req -extfile ssl.cnf
 ```
 
