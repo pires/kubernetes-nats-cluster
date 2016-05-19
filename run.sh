@@ -14,17 +14,15 @@ export PASS=${PASS:-T0pS3cr3t}
 export TLS=${TLS:-false}
 export TLSCERT=${TLSCERT:-}
 export TLSKEY=${TLSKEY:-}
+export TLSCMD=${TLSCMD:-}
 
 # run
-if [ "$TLS" = false ] ; then
-    sudo -E -u nats /gnatsd -m 8222 $EXTRA \
-	--user $USER --pass $PASS \
-	--cluster nats://0.0.0.0:6222 \
-	--routes nats://$USER:$PASS@$SVC:6222
-else
-    sudo -E -u nats /gnatsd -m 8222 $EXTRA \
-        --user $USER --pass $PASS \
-	--tls --tlscert $TLSCERT --tlskey $TLSKEY \
-        --cluster nats://0.0.0.0:6222 \
-        --routes nats://$USER:$PASS@$SVC:6222
+if [ "$TLS" != false ] ; then
+export TLSCMD=${TLSCMD:--tls --tlscert $TLSCERT --tlskey $TLSKEY}
 fi
+
+sudo -E -u nats /gnatsd -m 8222 $EXTRA \
+    --user $USER --pass $PASS \
+    $TLSCMD \
+    --cluster nats://0.0.0.0:6222 \
+    --routes nats://$USER:$PASS@$SVC:6222
