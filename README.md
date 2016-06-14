@@ -6,9 +6,9 @@ NATS cluster on top of Kubernetes made easy.
 ## Pre-requisites
 
 * Kubernetes cluster (tested with v1.2.4 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
-* GKE 1.1.x and 1.2.x
+* GKE 1.2.x
 * `kubectl` configured to access your cluster master API Server
-* OpenSSL for TLS certificate generation.
+* OpenSSL for TLS certificate generation
 
 ## How I built the image
 
@@ -31,24 +31,22 @@ git push --tags
 
 ```
 kubectl create -f svc-nats.yaml
-kubectl create -f rc-nats.yaml
+kubectl create -f deployment-nats.yaml
 ```
 
 ## Scale
 
 ```
-kubectl scale rc/nats --replicas=3
+kubectl scale deployment nats --replicas 3
 ```
 
 Did it work?
 
 ```
-$ kubectl get svc,rc,pods
+$ kubectl get svc,pods
 NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)                      SELECTOR         AGE
 kubernetes   10.100.0.1   <none>        443/TCP                      <none>           58m
 nats         None         <none>        4222/TCP,6222/TCP,8222/TCP   component=nats   23m
-CONTROLLER   CONTAINER(S)   IMAGE(S)                            SELECTOR         REPLICAS   AGE
-nats         nats           quay.io/pires/docker-nats:0.8.0   component=nats   3          23m
 NAME         READY     STATUS    RESTARTS   AGE
 nats-c3eu2   1/1       Running   0          23m
 nats-ruu5q   1/1       Running   0          21m
@@ -84,6 +82,6 @@ kubectl create secret generic tls-nats --from-file nats.pem --from-file nats-key
 
 Finally, deploy a secured NATS cluster:
 ```
-kubectl create -f rc-nats-tls.yaml
-kubectl scale rc/nats --replicas=3
+kubectl create -f deployment-nats-tls.yaml
+kubectl scale deployment nats --replicas 3
 ```
