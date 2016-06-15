@@ -16,13 +16,14 @@ First, one needs to build `gnatsd` that supports the topology gossiping released
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
-git co tags/v0.8.0
+git pull --tags
+git co tags/v0.8.1
 GOARCH=amd64 GOOS=linux go build
 ```
 
-Then, I copied the resulting binary to this repository `artifacts` folder, committed and proceeded to push a new tag that will trigger an automatic build:
+Then, I copied the resulting binary to this repository `artifacts` folder, changed `deployment-nats.yaml` accordingly, committed and proceeded to push a new tag that will trigger an automatic build:
 ```
-git tag 0.8.0
+git tag 0.8.1
 git push
 git push --tags
 ```
