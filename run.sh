@@ -18,7 +18,7 @@ export TLSCMD=${TLSCMD:-}
 
 # run
 if [ "$TLS" != false ] ; then
-export TLSCMD=${TLSCMD:--tls --tlscert $TLSCERT --tlskey $TLSKEY}
+    export TLSCMD=${TLSCMD:--tls --tlscert $TLSCERT --tlskey $TLSKEY}
 fi
 
 sudo -E -u nats /gnatsd -m 8222 $EXTRA \

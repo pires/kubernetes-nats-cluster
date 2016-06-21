@@ -12,16 +12,32 @@ NATS cluster on top of Kubernetes made easy.
 
 ## How I built the image
 
+### `gnatsd` (NATS server)
 First, one needs to build `gnatsd` that supports the topology gossiping released with version `0.8.0`..
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
 git pull --tags
 git co tags/v0.8.1
-GOARCH=amd64 GOOS=linux go build
+GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
 ```
 
-Then, I copied the resulting binary to this repository `artifacts` folder, changed `deployment-nats.yaml` accordingly, committed and proceeded to push a new tag that will trigger an automatic build:
+Then I copied the resulting `gnatsd` binary to this repository `artifacts` folder.
+
+### Route checker
+
+Because of issue #2, I decided to produce an app that makes sure that:
+* there's more than once instance of NATS available in the cluster, and if positive
+* at least one route is established
+```
+cd route_checker/
+GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
+mv route_checker ../artifacts
+```
+
+### Kubernetes Deployment
+
+One must change `deployment-nats.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
 git tag 0.8.1
 git push

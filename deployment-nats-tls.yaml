@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: nats
-        image: quay.io/pires/docker-nats:0.8.1
+        image: quay.io/pires/docker-nats:0.8.1_1
         imagePullPolicy: Always
         volumeMounts:
           - name: tls-volume
@@ -36,13 +36,13 @@ spec:
         livenessProbe:
           tcpSocket:
             port: 8222
-          initialDelaySeconds: 15
+          initialDelaySeconds: 10
           timeoutSeconds: 5
         readinessProbe:
-            tcpSocket:
-              port: 8222
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
+          tcpSocket:
+            port: 8222
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
       volumes:
       - name: tls-volume
         secret:
