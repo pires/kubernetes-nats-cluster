@@ -12,11 +12,20 @@ spec:
     spec:
       containers:
       - name: nats
-        image: quay.io/pires/docker-nats:0.8.1_1
+        image: quay.io/pires/docker-nats:0.9.2
         imagePullPolicy: Always
+        volumeMounts:
+          - name: tls-volume
+            mountPath: /etc/nats/tls
         env:
         - name: EXTRA
           value: -DV
+        - name: TLS
+          value: "true"
+        - name: TLSCERT
+          value: /etc/nats/tls/nats.pem
+        - name: TLSKEY
+          value: /etc/nats/tls/nats-key.pem
         ports:
         - containerPort: 4222
           name: client
@@ -25,9 +34,8 @@ spec:
         - containerPort: 8222
           name: monitor
         livenessProbe:
-          exec:
-            command:
-            - /route_checker
+          tcpSocket:
+            port: 8222
           initialDelaySeconds: 10
           timeoutSeconds: 5
         readinessProbe:
@@ -35,3 +43,7 @@ spec:
             port: 8222
           initialDelaySeconds: 10
           timeoutSeconds: 5
+      volumes:
+      - name: tls-volume
+        secret:
+          secretName: tls-nats

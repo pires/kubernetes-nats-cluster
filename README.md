@@ -5,20 +5,20 @@ NATS cluster on top of Kubernetes made easy.
 
 ## Pre-requisites
 
-* Kubernetes cluster (tested with v1.2.4 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
-* GKE 1.2.x
+* Kubernetes cluster (tested with v1.3.4 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
+* GKE 1.3.x
 * `kubectl` configured to access your cluster master API Server
 * OpenSSL for TLS certificate generation
 
 ## How I built the image
 
 ### `gnatsd` (NATS server)
-First, one needs to build `gnatsd` that supports the topology gossiping released with version `0.8.0`..
+First, one needs to build `gnatsd` that supports the topology gossiping released with version `0.9.2`..
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
 git pull --tags
-git co tags/v0.8.1
+git co tags/v0.9.2
 GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
 ```
 
@@ -37,9 +37,9 @@ mv route_checker ../artifacts
 
 ### Kubernetes Deployment
 
-One must change `deployment-nats.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
+One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.8.1_1
+git tag 0.9.2
 git push
 git push --tags
 ```
@@ -47,8 +47,8 @@ git push --tags
 ## Deploy
 
 ```
-kubectl create -f svc-nats.yaml
-kubectl create -f deployment-nats.yaml
+kubectl create -f svc.yaml
+kubectl create -f deployment.yaml
 ```
 
 ## Scale
@@ -99,6 +99,6 @@ kubectl create secret generic tls-nats --from-file nats.pem --from-file nats-key
 
 Finally, deploy a secured NATS cluster:
 ```
-kubectl create -f deployment-nats-tls.yaml
+kubectl create -f deployment-tls.yaml
 kubectl scale deployment nats --replicas 3
 ```
