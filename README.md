@@ -5,8 +5,9 @@ NATS cluster on top of Kubernetes made easy.
 
 ## Pre-requisites
 
-* Kubernetes cluster (tested with v1.3.4 on top of [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
-* GKE 1.3.x
+* Kubernetes cluster, tested with v1.3.4 on top of:
+** [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
+** Google Container Engine
 * `kubectl` configured to access your cluster master API Server
 * OpenSSL for TLS certificate generation
 
@@ -18,7 +19,7 @@ First, one needs to build `gnatsd` that supports the topology gossiping released
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
 git pull --tags
-git co tags/v0.9.2
+git co tags/v0.9.4
 GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
 ```
 
@@ -39,7 +40,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.9.2
+git tag 0.9.4
 git push
 git push --tags
 ```
