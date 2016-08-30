@@ -34,8 +34,9 @@ spec:
         - containerPort: 8222
           name: monitor
         livenessProbe:
-          tcpSocket:
-            port: 8222
+          exec:
+            command:
+            - /route_checker
           initialDelaySeconds: 10
           timeoutSeconds: 5
         readinessProbe:
