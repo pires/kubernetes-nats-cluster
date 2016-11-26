@@ -14,7 +14,7 @@ const NO_ROUTEZ_ESTABLISHED = 1
 
 var (
 	lookupName = flag.String("lookup", "nats", "Lookup name")
-	server     = flag.String("server", "localhost", "NATS server to query")
+	server     = flag.String("server", "http://localhost:8222", "NATS URL to query")
 )
 
 type routez struct {
@@ -43,7 +43,7 @@ func main() {
 
 	if !isFirst {
 		// query NATS monitoring endpoint
-		url := "http://" + *server + "/routez"
+		url := *server + "/routez"
 		fmt.Printf("Querying server %s..\n", url)
 		res, err := http.Get(url)
 		if err != nil {

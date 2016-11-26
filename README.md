@@ -5,7 +5,7 @@ NATS cluster on top of Kubernetes made easy.
 
 ## Pre-requisites
 
-* Kubernetes cluster, tested with v1.3.4 on top of:
+* Kubernetes cluster, tested with v1.4.6 on top of:
 ** [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
 ** Google Container Engine
 * `kubectl` configured to access your cluster master API Server
@@ -40,7 +40,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.9.4
+git tag 0.9.4_1
 git push
 git push --tags
 ```
