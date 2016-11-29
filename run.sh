@@ -9,20 +9,29 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 # set environment
 export SVC=${SVC:-nats}
 export EXTRA=${EXTRA:-}
-export USER=${USER:-ruser}
-export PASS=${PASS:-T0pS3cr3t}
+export USER=${USER:-}
+export PASS=${PASS:-}
 export TLS=${TLS:-false}
 export TLSCERT=${TLSCERT:-}
 export TLSKEY=${TLSKEY:-}
 export TLSCMD=${TLSCMD:-}
 
-# run
+# is TLS enabled?
 if [ "$TLS" != false ] ; then
-    export TLSCMD=${TLSCMD:--tls --tlscert $TLSCERT --tlskey $TLSKEY}
+    export TLSCMD="--tls --tlscert $TLSCERT --tlskey $TLSKEY"
 fi
+export TLSCMD=${TLSCMD:-}
 
-sudo -E -u nats /gnatsd -m 8222 $EXTRA \
-    --user $USER --pass $PASS \
+# is authentication enabled?
+if [ "$USER" != "" ] ; then
+    export AUTHCMD="--user $USER --pass $PASS"
+    export ROUTESCMD="--routes nats://$USER:$PASS@$SVC:6222"
+fi
+export AUTHCMD=${AUTHCMD:-}
+export ROUTESCMD=${ROUTESCMD:---routes nats://$SVC:6222}
+
+sudo -E -u nats /gnatsd -m 8222 --cluster nats://0.0.0.0:6222 \
+    $EXTRA \
     $TLSCMD \
-    --cluster nats://0.0.0.0:6222 \
-    --routes nats://$USER:$PASS@$SVC:6222
+    $AUTHCMD \
+    $ROUTESCMD
