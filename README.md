@@ -103,3 +103,15 @@ Finally, deploy a secured NATS cluster:
 kubectl create -f deployment-tls.yaml
 kubectl scale deployment nats --replicas 3
 ```
+
+## Other configurations
+
+One can configure `gnatsd` through environment variables, to be set on pod descriptors, as listed below:
+
+**SVC** - the headless service name used to discover NATS instances. Defaults to `nats`.
+**USER** - the username to authenticate with. Defaults to empty.
+**PASS** - the password to authenticate with. Defaults to empty.
+**TLS** - whether to enable TLS. Defaults to `false`.
+**TLSCERT** - the certificate to use for TLS. Defaults to empty.
+**TLSKEY** - the certificate key to use for TLS. Defaults to empty.
+**EXTRA** - extra arguments to pass to `gnatsd`, e.g. `-DV`. Defaults to empty.
