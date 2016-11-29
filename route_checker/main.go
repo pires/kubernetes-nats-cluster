@@ -3,14 +3,11 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
-	"os"
 )
-
-const NO_ROUTEZ_ESTABLISHED = 1
 
 var (
 	lookupName = flag.String("lookup", "nats", "Lookup name")
@@ -18,51 +15,53 @@ var (
 )
 
 type routez struct {
-	num_routez uint
+	RoutesCount int `json:"num_routes"`
 }
 
-func isFirstNatsInstanceInCluster(lookupName string) (bool, error) {
+func countInstancesInCluster(lookupName string) (int, error) {
 	_, srvRecords, err := net.LookupSRV("", "", lookupName)
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 
-	return len(srvRecords) == 1, nil
+	return len(srvRecords), nil
 }
 
 func main() {
 	flag.Parse()
 
 	// if we're the only instance in the cluster, we're good to go
-	// otherwise, we need to check if there are any routez established
+	// otherwise, we need to check if there are any routes established
 	// and if not, exit with error.
-	isFirst, err := isFirstNatsInstanceInCluster(*lookupName)
+	instances, err := countInstancesInCluster(*lookupName)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("There was an error while verifiying if this is the first instance in the cluster: %s\n", err.Error())
+	} else {
+		log.Printf("There are %d instances in the cluster.", instances)
 	}
 
-	if !isFirst {
+	if instances > 1 {
 		// query NATS monitoring endpoint
 		url := *server + "/routez"
-		fmt.Printf("Querying server %s..\n", url)
+		log.Printf("Querying server %s..\n", url)
 		res, err := http.Get(url)
 		if err != nil {
-			panic(err.Error())
+			log.Fatalf("There was an error while querying %s: %s\n", url, err.Error())
 		}
 
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			panic(err.Error())
+			log.Fatalf("There was an error while reading response: %s\n", err.Error())
 		}
 
 		var data routez
 		if err := json.Unmarshal(body, &data); err != nil {
-			panic(err)
+			log.Fatalf("There was an error while decoding response: %s\n", err.Error())
 		}
 
-		// if no routes are established, exit with error
-		if data.num_routez == 0 {
-			os.Exit(NO_ROUTEZ_ESTABLISHED)
+		// if enough routes aren't established, exit with error
+		if data.RoutesCount < instances-1 {
+			log.Fatalf("There aren't enough routes established. Only %d out of %d.", data.RoutesCount, instances-1)
 		}
 	}
 }
