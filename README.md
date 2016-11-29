@@ -6,10 +6,10 @@ NATS cluster on top of Kubernetes made easy.
 ## Pre-requisites
 
 * Kubernetes cluster, tested with v1.4.6 on top of:
-** [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster))
-** Google Container Engine
+ * [Vagrant + CoreOS](https://github.com/pires/kubernetes-vagrant-coreos-cluster)
+ * Google Container Engine
 * `kubectl` configured to access your cluster master API Server
-* OpenSSL for TLS certificate generation
+* Optionally, OpenSSL for TLS certificate generation
 
 ## How I built the image
 
@@ -109,9 +109,15 @@ kubectl scale deployment nats --replicas 3
 One can configure `gnatsd` through environment variables, to be set on pod descriptors, as listed below:
 
 **SVC** - the headless service name used to discover NATS instances. Defaults to `nats`.
+
 **USER** - the username to authenticate with. Defaults to empty.
+
 **PASS** - the password to authenticate with. Defaults to empty.
+
 **TLS** - whether to enable TLS. Defaults to `false`.
+
 **TLSCERT** - the certificate to use for TLS. Defaults to empty.
+
 **TLSKEY** - the certificate key to use for TLS. Defaults to empty.
+
 **EXTRA** - extra arguments to pass to `gnatsd`, e.g. `-DV`. Defaults to empty.
