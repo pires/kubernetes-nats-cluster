@@ -40,7 +40,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.9.4_1
+git tag 0.9.4_2
 git push
 git push --tags
 ```
