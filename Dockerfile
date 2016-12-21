@@ -1,4 +1,5 @@
 FROM alpine:3.4
+
 MAINTAINER pjpires@gmail.com
 
 EXPOSE 4222 6222 8222

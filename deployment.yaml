@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: nats
-        image: quay.io/pires/docker-nats:0.9.4_2
+        image: quay.io/pires/docker-nats:0.9.6
         imagePullPolicy: Always
         env:
         - name: EXTRA
