@@ -65,10 +65,11 @@ $ kubectl get svc,pods
 NAME         CLUSTER_IP   EXTERNAL_IP   PORT(S)                      SELECTOR         AGE
 kubernetes   10.100.0.1   <none>        443/TCP                      <none>           58m
 nats         None         <none>        4222/TCP,6222/TCP,8222/TCP   component=nats   23m
-NAME         READY     STATUS    RESTARTS   AGE
-nats-c3eu2   1/1       Running   0          23m
-nats-ruu5q   1/1       Running   0          21m
-nats-dke71   1/1       Running   0          21m
+
+NAME                   READY     STATUS    RESTARTS   AGE
+nats-651427393-5zmb7   1/1       Running   0          23m
+nats-651427393-dn3rk   1/1       Running   0          21m
+nats-651427393-gmc5n   1/1       Running   0          21m
 ```
 
 ## Access the service
