@@ -14,12 +14,12 @@ NATS cluster on top of Kubernetes made easy.
 ## How I built the image
 
 ### `gnatsd` (NATS server)
-First, one needs to build `gnatsd` that supports the topology gossiping released with version `0.9.2`..
+First, one needs to build `gnatsd` that supports the topology gossiping, available since version `0.9.2`..
 ```
 cd $GOPATH/src/github.com/nats-io/gnatsd
 git pull --rebase origin master
 git pull --tags
-git co tags/v0.9.6
+git co c6e8014
 GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
 ```
 
@@ -40,7 +40,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.9.6
+git tag 0.9.6_1
 git push
 git push --tags
 ```
