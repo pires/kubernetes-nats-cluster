@@ -30,7 +30,10 @@ fi
 export AUTHCMD=${AUTHCMD:-}
 export ROUTESCMD=${ROUTESCMD:---routes nats://$SVC:6222}
 
-sudo -E -u nats /gnatsd -m 8222 --cluster nats://0.0.0.0:6222 \
+sudo -E -u nats /gnatsd \
+    -m 8222 \
+    --cluster nats://0.0.0.0:6222 \
+    --connect_retries 30 \
     $EXTRA \
     $TLSCMD \
     $AUTHCMD \
