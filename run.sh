@@ -1,11 +1,5 @@
 #!/bin/sh
 
-# provision NATS user
-addgroup sudo
-adduser -D -g '' nats
-adduser nats sudo
-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
 # set environment
 export SVC=${SVC:-nats}
 export EXTRA=${EXTRA:-}
@@ -30,7 +24,7 @@ fi
 export AUTHCMD=${AUTHCMD:-}
 export ROUTESCMD=${ROUTESCMD:---routes nats://$SVC:6222}
 
-sudo -E -u nats /gnatsd \
+exec /gnatsd \
     -m 8222 \
     --cluster nats://0.0.0.0:6222 \
     --connect_retries 30 \
