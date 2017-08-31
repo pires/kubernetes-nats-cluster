@@ -1,10 +1,12 @@
-FROM alpine:3.4
+FROM alpine:3.6
 
-MAINTAINER pjpires@gmail.com
+LABEL maintainer=pjpires@gmail.com
 
 EXPOSE 4222 6222 8222
 
-RUN apk add --update ca-certificates sudo
+RUN apk update && \
+    apk add ca-certificates && \
+    rm -rf /var/cache/apk/*
 
 COPY artifacts/gnatsd /gnatsd
 COPY artifacts/route_checker /route_checker

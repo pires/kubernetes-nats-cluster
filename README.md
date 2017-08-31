@@ -11,28 +11,38 @@ NATS cluster on top of Kubernetes made easy.
 * `kubectl` configured to access your cluster master API Server
 * Optionally, OpenSSL for TLS certificate generation
 
-## How I built the image
+## Building the image
 
 ### `gnatsd` (NATS server)
-First, one needs to build `gnatsd` that supports the topology gossiping, available since version `0.9.2`..
+
+First, one needs to download the version of the `gnatsd` binary that runs on the official Docker image. This is available at https://github.com/nats-io/nats-docker:
+
 ```
-cd $GOPATH/src/github.com/nats-io/gnatsd
-git pull --rebase origin master
-git pull --tags
-git co c6e8014
-GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
+curl -o artifacts/gnatsd https://raw.githubusercontent.com/nats-io/nats-docker/master/gnatsd
+chmod a+x artifacts/gnatsd
 ```
 
-Then I copied the resulting `gnatsd` binary to this repository `artifacts` folder.
+Alternatively one can build the binary locally:
+
+```
+go get github.com/nats-io/gnatsd
+cd $GOPATH/src/github.com/nats-io/gnatsd
+git checkout v1.0.2
+GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -v -a -tags netgo -installsuffix netgo -ldflags "-s -w -X github.com/nats-io/gnatsd/version.GITCOMMIT=`git rev-parse --short HEAD`"
+```
+
+Then one needs to copy the resulting `gnatsd` binary to this repository's `artifacts` directory.
 
 ### Route checker
 
-Because of issue #2, I decided to produce an app that makes sure that:
+Because of issue #2, it was decided to produce an app that makes sure that:
+
 * there's more than once instance of NATS available in the cluster, and if positive
 * at least one route is established
+
 ```
 cd route_checker/
-GOARCH=amd64 GOOS=linux go build -ldflags '-w -extldflags=-static'
+GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -v -a -tags netgo -installsuffix netgo
 mv route_checker ../artifacts
 ```
 
@@ -40,7 +50,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 0.9.6_1
+git tag 1.0.2
 git push
 git push --tags
 ```
