@@ -27,7 +27,7 @@ Alternatively one can build the binary locally:
 ```
 go get github.com/nats-io/gnatsd
 cd $GOPATH/src/github.com/nats-io/gnatsd
-git checkout v1.0.2
+git checkout v1.0.0
 GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -v -a -tags netgo -installsuffix netgo -ldflags "-s -w -X github.com/nats-io/gnatsd/version.GITCOMMIT=`git rev-parse --short HEAD`"
 ```
 
@@ -50,7 +50,7 @@ mv route_checker ../artifacts
 
 One must change `deployment.yaml` accordingly, commit everything and proceed to push a new tag that will trigger an automatic build:
 ```
-git tag 1.0.2
+git tag 1.0.0
 git push
 git push --tags
 ```
