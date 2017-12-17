@@ -15,7 +15,7 @@ in on the way (see [#5](https://github.com/pires/kubernetes-nats-cluster/issues/
 ## Deploy
 
 We will be deploying a cluster of 3 NATS instances, with the following set-up:
-- TLS on
+- TLS on for clients, but not clustering because peer-auth requires real SANS DNS in certificate
 - NATS client credentials: `nats_client_user:nats_client_pwd`
 - NATS route/cluster credentials: `nats_route_user:nats_route_pwd`
 - Logging: `debug:false`, `trace:true`, `logtime:true`
