@@ -81,15 +81,6 @@ $ kubectl logs -f nats-0
 [1] 2017/12/17 12:40:39.952598 [TRC] 10.244.1.4:46242 - rid:4 - <<- [PONG]
 ```
 
-### Route checker
-
-Because of issue #2, I decided to produce an app that makes sure that:
-
-* there's more than one instance of NATS available in the cluster, and, if positive,
-* one route to each of the other agents is setup.
-
-However
-
 ## Scale
 
 **WARNING:** Due to the [Pod anti-affinity](#pod-anti-affinity) rule, for scaling up to _n_ NATS
