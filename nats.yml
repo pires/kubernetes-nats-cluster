@@ -43,12 +43,12 @@ spec:
       containers:
       - name: nats
         image: nats:1.0.4
-        args: [ "--config", "/etc/nats/nats.conf"]
+        args: [ "--config", "/etc/nats/config/nats.conf"]
         volumeMounts:
           - name: tls-volume
             mountPath: /etc/nats/tls
           - name: config-volume
-            mountPath: /etc/nats
+            mountPath: /etc/nats/config
         ports:
         - containerPort: 4222
           name: client
