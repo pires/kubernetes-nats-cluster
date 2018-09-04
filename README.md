@@ -1,6 +1,8 @@
 # kubernetes-nats-cluster
 NATS cluster on top of Kubernetes made easy.
 
+**THIS PROJECT HAS BEEN ARCHIVED. SEE https://github.com/nats-io/nats-operator**
+
 **NOTE:** This repository provides a configurable way to deploy secure, available
 and scalable NATS clusters. However, [a _smarter_ solution](https://github.com/pires/nats-operator)
 in on the way (see [#5](https://github.com/pires/kubernetes-nats-cluster/issues/5)).
